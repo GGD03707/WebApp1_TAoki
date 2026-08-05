@@ -57,22 +57,23 @@ init_state()
 # ネットワーク構成図の描画
 # ============================================================
 def draw_network(highlight_break: bool = False, dim_unreachable: bool = False):
-    fig, ax = plt.subplots(figsize=(6, 6))
-    ax.set_xlim(0, 6)
-    ax.set_ylim(0, 10)
+    # SVGA (800x600px, 4:3) の画面サイズに合わせて描画
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=100)
+    ax.set_xlim(0, 8)
+    ax.set_ylim(0, 6)
     ax.axis("off")
 
     nodes = {
-        "ISP": (0.8, 9.0),
-        "ルーター": (3.0, 9.0),
-        "HUB": (3.0, 6.8),
-        "無線AP": (1.2, 4.6),
-        "ノートPC": (1.2, 2.4),
-        "デスクトップPC": (4.6, 4.6),
-        "プリンタ": (4.6, 2.4),
+        "ISP": (1.0, 5.2),
+        "ルーター": (3.3, 5.2),
+        "HUB": (3.3, 3.5),
+        "無線AP": (1.6, 1.9),
+        "ノートPC": (1.6, 0.5),
+        "デスクトップPC": (5.6, 1.9),
+        "プリンタ": (5.6, 0.5),
     }
 
-    box_w, box_h = 1.6, 0.8
+    box_w, box_h = 1.5, 0.7
 
     def box_color(name):
         if dim_unreachable and name in ("デスクトップPC",):
@@ -119,10 +120,10 @@ def draw_network(highlight_break: bool = False, dim_unreachable: bool = False):
         ax.add_patch(rect)
         ax.text(x, y, name, ha="center", va="center", fontsize=10, zorder=4)
 
-    ax.text(2.0, 5.75, "(有線)", fontsize=8, color="#666666", ha="center")
-    ax.text(1.5, 3.5, "(無線)", fontsize=8, color="#666666", ha="center")
-    ax.text(3.9, 5.75, "(有線)", fontsize=8, color="#666666", ha="center")
-    ax.text(4.0, 3.5, "(有線)", fontsize=8, color="#666666", ha="center")
+    ax.text(2.45, 3.75, "(有線)", fontsize=8, color="#666666", ha="center")
+    ax.text(1.85, 1.2, "(無線)", fontsize=8, color="#666666", ha="center")
+    ax.text(4.6, 3.75, "(有線)", fontsize=8, color="#666666", ha="center")
+    ax.text(4.9, 1.2, "(有線)", fontsize=8, color="#666666", ha="center")
 
     return fig
 
@@ -165,7 +166,7 @@ if not st.session_state.started:
         st.session_state.started = True
         st.rerun()
 else:
-    st.pyplot(draw_network())
+    st.pyplot(draw_network(), use_container_width=False)
 
     # ------------------------------------------------------------
     # ステップ2: トラブル発生
@@ -255,7 +256,7 @@ else:
                         """
                     )
 
-                    st.pyplot(draw_network(highlight_break=True, dim_unreachable=True))
+                    st.pyplot(draw_network(highlight_break=True, dim_unreachable=True), use_container_width=False)
 
                     if st.button("🔄 もう一度挑戦する"):
                         reset_app()
